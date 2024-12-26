@@ -2,8 +2,17 @@ package com.example.supplier.util;
 
 public class CodigoUtil {
 
-    public static boolean isValidCNPJ(long cnpj) {
-        String cnpjStr = String.format("%014d", cnpj);
+    public static boolean isValidCNPJ(String cnpj) {
+        cnpj = cnpj.toUpperCase();
+        StringBuilder cnpjStr = new StringBuilder();
+        for (int i = 0; i < cnpj.length(); i++) {
+            char c = cnpj.charAt(i);
+            if (Character.isLetterOrDigit(c)) {
+                int asciiCode = (int) c - 48;
+                cnpjStr.append(asciiCode);
+            }
+        }
+
         if (cnpjStr.length() != 14) {
             return false;
         }
@@ -35,7 +44,7 @@ public class CodigoUtil {
     }
 
     public static void main(String[] args) {
-        long cnpj = 12345678000195L; // Example CNPJ
+        String cnpj = "12345678000195"; // Example CNPJ
         System.out.println("CNPJ is valid: " + isValidCNPJ(cnpj));
     }
 }
