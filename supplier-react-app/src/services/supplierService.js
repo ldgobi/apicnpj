@@ -9,10 +9,12 @@ export const getAllSuppliers = async () => {
 };
 
 export const createSupplier = async (supplier) => {
-    // Remove non-numeric characters from CNPJ
     const cleanedSupplier = {
         ...supplier,
-        cnpj: supplier.cnpj.replace(/\D/g, '')
+        cnpj: supplier.cnpj.replace(/\W/g, '').toUpperCase().split('').map(char => {
+            const asciiCode = char.charCodeAt(0) - 48;
+            return (asciiCode >= 17) ? String(asciiCode) : char;
+        }).join('')
     };
 
     const response = await fetch(`${serverUrl}/api/suppliers`, {
