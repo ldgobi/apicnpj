@@ -1,129 +1,152 @@
 # SupplierService Documentation
 
 ## Overview
-The `SupplierService` class is a service layer in a Spring-based application that manages operations related to suppliers. It interacts with the `SupplierRepository` to perform CRUD (Create, Read, Update, Delete) operations on supplier entities. Additionally, it validates supplier data using utility methods before persisting or updating records.
+The `SupplierService` class is a service layer in a Spring-based application that manages operations related to `Supplier` entities. It interacts with the `SupplierRepository` to perform CRUD (Create, Read, Update, Delete) operations and includes validation logic for supplier data, such as verifying the validity of a CNPJ (Brazilian company registration number).
 
 ---
 
 ## Class Details
 
-### Package
+### **Package**
 `com.example.supplier.service`
 
-### Annotations
+### **Annotations**
 - `@Service`: Indicates that this class is a Spring service component, making it eligible for Spring's component scanning and dependency injection.
 
 ---
 
 ## Dependencies
 
-### Injected Dependencies
+### **Injected Dependencies**
 | Dependency              | Description                                                                 |
 |--------------------------|-----------------------------------------------------------------------------|
 | `SupplierRepository`     | Repository interface for database operations on `Supplier` entities.       |
-| `CodigoUtil`             | Utility class for validating supplier-related data, such as CNPJ format.   |
+| `CodigoUtil`             | Utility class for validating CNPJ values.                                  |
 
 ---
 
 ## Methods
 
-### `createSupplier(Supplier supplier)`
-Creates a new supplier in the database after validating the CNPJ.
+### **1. createSupplier(Supplier supplier)**
 
-#### Parameters
-| Name       | Type       | Description                     |
-|------------|------------|---------------------------------|
-| `supplier` | `Supplier` | The supplier entity to create. |
+#### **Description**
+Creates a new `Supplier` entity after validating its CNPJ.
 
-#### Returns
-| Type       | Description                     |
-|------------|---------------------------------|
-| `Supplier` | The saved supplier entity.      |
+#### **Parameters**
+| Name       | Type       | Description                          |
+|------------|------------|--------------------------------------|
+| `supplier` | `Supplier` | The supplier entity to be created.  |
 
-#### Exceptions
-| Type                        | Description                     |
-|-----------------------------|---------------------------------|
-| `IllegalArgumentException`  | Thrown if the CNPJ is invalid. |
+#### **Returns**
+| Type       | Description                          |
+|------------|--------------------------------------|
+| `Supplier` | The saved supplier entity.          |
 
----
-
-### `getAllSuppliers()`
-Retrieves all suppliers from the database.
-
-#### Returns
-| Type            | Description                     |
-|-----------------|---------------------------------|
-| `List<Supplier>` | List of all supplier entities. |
+#### **Exceptions**
+| Type                        | Description                          |
+|-----------------------------|--------------------------------------|
+| `IllegalArgumentException`  | Thrown if the CNPJ is invalid.      |
 
 ---
 
-### `getSupplierById(Long id)`
-Fetches a supplier by its unique identifier.
+### **2. getAllSuppliers()**
 
-#### Parameters
-| Name | Type   | Description                     |
-|------|--------|---------------------------------|
-| `id` | `Long` | The unique ID of the supplier. |
+#### **Description**
+Retrieves all `Supplier` entities from the database.
 
-#### Returns
-| Type                  | Description                     |
-|-----------------------|---------------------------------|
+#### **Parameters**
+None.
+
+#### **Returns**
+| Type            | Description                          |
+|------------------|--------------------------------------|
+| `List<Supplier>` | List of all suppliers.              |
+
+---
+
+### **3. getSupplierById(Long id)**
+
+#### **Description**
+Fetches a `Supplier` entity by its ID.
+
+#### **Parameters**
+| Name | Type   | Description                          |
+|------|--------|--------------------------------------|
+| `id` | `Long` | The ID of the supplier to retrieve. |
+
+#### **Returns**
+| Type                  | Description                          |
+|-----------------------|--------------------------------------|
 | `Optional<Supplier>`  | The supplier entity wrapped in an `Optional`. |
 
 ---
 
-### `updateSupplier(Long id, Supplier supplierDetails)`
-Updates an existing supplier's details after validating the CNPJ.
+### **4. updateSupplier(Long id, Supplier supplierDetails)**
 
-#### Parameters
-| Name              | Type       | Description                     |
-|-------------------|------------|---------------------------------|
-| `id`              | `Long`     | The unique ID of the supplier. |
-| `supplierDetails` | `Supplier` | The updated supplier details.  |
+#### **Description**
+Updates an existing `Supplier` entity with new details after validating the CNPJ.
 
-#### Returns
-| Type       | Description                     |
-|------------|---------------------------------|
-| `Supplier` | The updated supplier entity.   |
+#### **Parameters**
+| Name              | Type       | Description                          |
+|-------------------|------------|--------------------------------------|
+| `id`              | `Long`     | The ID of the supplier to update.   |
+| `supplierDetails` | `Supplier` | The updated supplier details.       |
 
-#### Exceptions
-| Type                        | Description                     |
-|-----------------------------|---------------------------------|
-| `IllegalArgumentException`  | Thrown if the CNPJ is invalid. |
-| `RuntimeException`          | Thrown if the supplier is not found. |
+#### **Returns**
+| Type       | Description                          |
+|------------|--------------------------------------|
+| `Supplier` | The updated supplier entity.        |
+
+#### **Exceptions**
+| Type                        | Description                          |
+|-----------------------------|--------------------------------------|
+| `IllegalArgumentException`  | Thrown if the CNPJ is invalid.      |
+| `RuntimeException`          | Thrown if the supplier is not found.|
 
 ---
 
-### `deleteSupplier(Long id)`
-Deletes a supplier by its unique identifier.
+### **5. deleteSupplier(Long id)**
 
-#### Parameters
-| Name | Type   | Description                     |
-|------|--------|---------------------------------|
-| `id` | `Long` | The unique ID of the supplier. |
+#### **Description**
+Deletes a `Supplier` entity by its ID.
 
-#### Returns
-| Type      | Description                     |
-|-----------|---------------------------------|
-| `boolean` | `true` if the supplier was successfully deleted. |
+#### **Parameters**
+| Name | Type   | Description                          |
+|------|--------|--------------------------------------|
+| `id` | `Long` | The ID of the supplier to delete.   |
 
-#### Exceptions
-| Type             | Description                     |
-|------------------|---------------------------------|
-| `RuntimeException` | Thrown if the supplier is not found. |
+#### **Returns**
+| Type      | Description                          |
+|-----------|--------------------------------------|
+| `boolean` | Returns `true` if the deletion is successful. |
+
+#### **Exceptions**
+| Type               | Description                          |
+|--------------------|--------------------------------------|
+| `RuntimeException` | Thrown if the supplier is not found.|
 
 ---
 
 ## Insights
 
-1. **Validation Logic**: The class uses `CodigoUtil.isValidCNPJ()` to ensure that the CNPJ (Cadastro Nacional da Pessoa Jurídica) is valid before creating or updating a supplier. This ensures data integrity and compliance with business rules.
+### **Validation**
+- The `CodigoUtil.isValidCNPJ()` method is used to validate the CNPJ before creating or updating a supplier. This ensures data integrity and compliance with Brazilian business regulations.
 
-2. **Error Handling**: The service throws specific exceptions (`IllegalArgumentException` and `RuntimeException`) to handle invalid data and missing entities, respectively. This provides clear feedback to the caller.
+### **Error Handling**
+- The service uses exceptions (`IllegalArgumentException` and `RuntimeException`) to handle invalid input and missing entities, providing meaningful error messages.
 
-3. **CRUD Operations**: The class implements all CRUD operations, making it a complete service layer for managing suppliers.
+### **CRUD Operations**
+- The class provides full CRUD functionality for `Supplier` entities:
+  - **Create**: `createSupplier()`
+  - **Read**: `getAllSuppliers()` and `getSupplierById()`
+  - **Update**: `updateSupplier()`
+  - **Delete**: `deleteSupplier()`
 
-4. **Optional Usage**: The `getSupplierById` method returns an `Optional<Supplier>`, which is a good practice to handle potential null values and avoid `NullPointerException`.
+### **Optional Usage**
+- The `getSupplierById()` method returns an `Optional<Supplier>` to handle cases where the supplier may not exist, promoting safer null handling.
 
-5. **Spring Integration**: The use of `@Service` and `@Autowired` annotations ensures seamless integration with the Spring framework for dependency injection and service management.
+### **Spring Integration**
+- The use of `@Autowired` ensures seamless dependency injection for the repository, adhering to Spring's IoC (Inversion of Control) principles.
 
-6. **Encapsulation of Business Logic**: The service encapsulates business logic, such as validation and exception handling, ensuring that the repository layer focuses solely on data persistence.
+### **Transactional Behavior**
+- Although not explicitly annotated, the repository methods (`save`, `findAll`, `findById`, `deleteById`) are transactional by default in Spring Data JPA, ensuring consistency during database operations.

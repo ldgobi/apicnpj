@@ -1,8 +1,7 @@
-# Documentation for `CodigoUtil.java`
+# Documentation: `CodigoUtil.java`
 
 ## Overview
-
-The `CodigoUtil` class provides a utility method to validate Brazilian CNPJ (Cadastro Nacional da Pessoa Jurídica) numbers. CNPJ is a unique identifier assigned to companies in Brazil. The validation process ensures that the provided CNPJ adheres to the official algorithm used for verification.
+The `CodigoUtil` class provides utility methods for validating Brazilian CNPJ numbers. A CNPJ (Cadastro Nacional da Pessoa Jurídica) is a unique identifier for companies registered in Brazil. This class includes logic to verify the validity of a given CNPJ based on its checksum calculation.
 
 ---
 
@@ -12,88 +11,89 @@ The `CodigoUtil` class provides a utility method to validate Brazilian CNPJ (Cad
 `com.example.supplier.util`
 
 ### Purpose
-The class is designed to validate CNPJ numbers using the official checksum algorithm. It also includes a `main` method for testing purposes.
+The class is designed to validate CNPJ numbers using the official algorithm for checksum verification.
 
 ---
 
 ## Method Details
 
 ### `isValidCNPJ(long cnpj)`
-
 #### Description
-This method validates a given CNPJ number by:
-1. Formatting the input into a 14-digit string.
-2. Calculating two verification digits using predefined weight arrays.
-3. Comparing the calculated verification digits with the ones in the input.
+Validates a given CNPJ number by checking its format and performing checksum calculations.
 
 #### Parameters
-| Parameter | Type   | Description                          |
-|-----------|--------|--------------------------------------|
-| `cnpj`    | `long` | The CNPJ number to be validated.    |
+| Name  | Type   | Description                                      |
+|-------|--------|--------------------------------------------------|
+| `cnpj`| `long` | The CNPJ number to be validated.                 |
 
 #### Return Value
 | Type      | Description                                      |
 |-----------|--------------------------------------------------|
 | `boolean` | Returns `true` if the CNPJ is valid, otherwise `false`. |
 
-#### Algorithm
-1. **Input Validation**: The input is converted to a 14-digit string. If the length is not 14, the method returns `false`.
-2. **First Verification Digit**:
-   - Multiply the first 12 digits of the CNPJ by the corresponding weights in `weight1`.
-   - Compute the sum of the products.
-   - Calculate the modulus of the sum by 11.
-   - Determine the first verification digit:
-     - If the modulus is less than 2, the digit is `0`.
-     - Otherwise, the digit is `11 - modulus`.
-3. **Second Verification Digit**:
-   - Multiply the first 13 digits (including the first verification digit) by the corresponding weights in `weight2`.
-   - Compute the sum of the products.
-   - Calculate the modulus of the sum by 11.
-   - Determine the second verification digit:
-     - If the modulus is less than 2, the digit is `0`.
-     - Otherwise, the digit is `11 - modulus`.
-4. **Validation**:
-   - Compare the calculated verification digits with the 13th and 14th digits of the input CNPJ.
-   - Return `true` if they match, otherwise `false`.
+#### Logic
+1. Converts the `long` CNPJ number into a 14-character string.
+2. Checks if the string length is exactly 14 characters.
+3. Performs two checksum calculations:
+   - **First Checksum**: Uses the first 12 digits and a predefined weight array (`weight1`).
+   - **Second Checksum**: Uses the first 13 digits and another predefined weight array (`weight2`).
+4. Validates the last two digits of the CNPJ against the calculated checksum digits.
+5. Returns `false` if any exception occurs during processing.
+
+#### Algorithm Details
+- **Weights for Checksum**:
+  - `weight1`: `{5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2}`
+  - `weight2`: `{6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2}`
+- **Checksum Calculation**:
+  - Multiply each digit of the CNPJ by its corresponding weight.
+  - Sum the results.
+  - Compute the modulus (`mod`) of the sum by 11.
+  - Determine the checksum digit:
+    - If `mod < 2`, the checksum digit is `0`.
+    - Otherwise, the checksum digit is `11 - mod`.
 
 #### Example Usage
 ```java
 long cnpj = 12345678000195L; // Example CNPJ
-boolean isValid = CodigoUtil.isValidCNPJ(cnpj);
-System.out.println("CNPJ is valid: " + isValid);
+System.out.println("CNPJ is valid: " + CodigoUtil.isValidCNPJ(cnpj));
 ```
 
 ---
 
 ### `main(String[] args)`
-
 #### Description
-A simple test method to demonstrate the usage of the `isValidCNPJ` method. It validates a hardcoded CNPJ and prints the result to the console.
+A simple entry point for testing the `isValidCNPJ` method.
 
-#### Example Output
-```
-CNPJ is valid: false
-```
+#### Parameters
+| Name   | Type         | Description                          |
+|--------|--------------|--------------------------------------|
+| `args` | `String[]`   | Command-line arguments (not used).  |
+
+#### Functionality
+- Tests the `isValidCNPJ` method with a sample CNPJ (`12345678000195L`).
+- Prints the validation result to the console.
 
 ---
 
 ## Insights
 
-1. **CNPJ Validation Algorithm**:
-   - The method implements the official CNPJ validation algorithm, which uses two sets of weights (`weight1` and `weight2`) to calculate the verification digits.
-   - This ensures compliance with Brazilian standards for CNPJ validation.
+### Strengths
+- Implements the official CNPJ validation algorithm, ensuring compliance with Brazilian standards.
+- Handles exceptions gracefully, returning `false` for invalid inputs or errors during processing.
 
-2. **Error Handling**:
-   - The method includes a `try-catch` block to handle potential exceptions, such as invalid input formats. If an exception occurs, the method returns `false`.
+### Limitations
+- The method assumes the input CNPJ is a valid `long` number. It does not handle cases where the CNPJ is provided in other formats (e.g., as a string with special characters like dots or dashes).
+- The validation logic does not provide detailed error messages for invalid inputs.
 
-3. **Input Formatting**:
-   - The input CNPJ is formatted as a 14-digit string using `String.format`. This ensures that shorter numbers are padded with leading zeros.
+### Potential Enhancements
+- Add support for CNPJ input as a formatted string (e.g., `"12.345.678/0001-95"`).
+- Provide detailed error messages or logging for invalid inputs.
+- Extend the utility class to include other Brazilian document validations (e.g., CPF).
 
-4. **Efficiency**:
-   - The algorithm is efficient, with a time complexity of O(1) since it processes a fixed number of digits (14).
+---
 
-5. **Limitations**:
-   - The method does not handle non-numeric inputs directly, as it expects a `long` type. This could be extended to accept `String` inputs for more flexibility.
-
-6. **Testing**:
-   - The `main` method provides a basic example of how to use the utility. For production use, more comprehensive testing with various CNPJ values is recommended.
+## Metadata
+| Key         | Value                |
+|-------------|----------------------|
+| File Name   | `CodigoUtil.java`    |
+| Package     | `com.example.supplier.util` |
