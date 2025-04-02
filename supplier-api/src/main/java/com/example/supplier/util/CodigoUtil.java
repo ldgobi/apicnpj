@@ -32,7 +32,7 @@ public class CodigoUtil {
         } catch (Exception e) {
             return false;
         }
-    }
+    } 
 
     public static void main(String[] args) {
         long cnpj = 12345678000195L; // Example CNPJ
