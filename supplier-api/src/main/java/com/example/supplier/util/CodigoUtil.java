@@ -7,6 +7,11 @@ public class CodigoUtil {
         if (cnpjStr.length() != 14) {
             return false;
         }
+        
+        // Check if CNPJ is all zeros
+        if (cnpj == 0) {
+            return false;
+        }
 
         int[] weight1 = {5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
         int[] weight2 = {6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
