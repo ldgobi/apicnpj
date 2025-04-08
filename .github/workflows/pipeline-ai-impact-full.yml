@@ -47,7 +47,7 @@ jobs:
       - name: Create Classes List
         id: changes
         run: |
-          java_files=$(find "src/main/java" -type f -name "*.java")          
+          java_files=$(find src/main/java/** -type f -name *.java)          
           JAVA_FILES=()
           
           while IFS= read -r FILE; do
