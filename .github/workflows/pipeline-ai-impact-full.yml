@@ -46,19 +46,8 @@ jobs:
 
       - name: Create Classes List
         id: changes
-          # java_files=$(find "src/main/java/com/scalesec/vulnado" -type f -name "*.java")
-          # while IFS= read -r FILE; do
-          #   echo "Processing file: $FILE"
-          #   JAVA_FILES+=(${FILE})
-          # done <<< "${java_files}"
-          # echo "JAVA_Files: ${JAVA_FILES}"
-          # {
-          #   echo "java_files<<EOF"
-          #   echo "$JAVA_FILES"
-          #   echo "EOF"
-          # } >> "$GITHUB_ENV"
         run: |
-          java_files=$(find "src/main/java/com/scalesec/vulnado" -type f -name "*.java")          
+          java_files=$(find "src/main/java" -type f -name "*.java")          
           JAVA_FILES=()
           
           while IFS= read -r FILE; do
