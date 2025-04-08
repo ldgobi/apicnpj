@@ -211,7 +211,7 @@ jobs:
           commit-message: "AI Impact documentation and Unit Tests"
           title: "Documentation and Unit Tests created by IA Impact"
           body: "Pull request created by IA Impact CodeDocumenter and CodeTester."
-            branch: "ai-impact-docs-tests-${{ github.run_id }}-${{ github.event.workflow_run.created_at }}"
+          branch: "ai-impact-docs-tests-${{github.run_id}}-${{github.event.workflow_run.created_at}}"
           delete-branch: true
           add-paths: |
               ./**/*.java
