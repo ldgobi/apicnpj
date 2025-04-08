@@ -48,7 +48,7 @@ jobs:
         id: changes
         run: |
           echo "$(pwd)"
-          java_files=$(find src/main/java -type f -name "*.java" -print)          
+          java_files=$(find supplier-api/src/main/java -type f -name "*.java")          
           JAVA_FILES=()
           
           while IFS= read -r FILE; do
@@ -69,7 +69,7 @@ jobs:
           FILES_ARRAY=()
           while IFS= read -r FILE; do
             CLASS_NAME=$(basename "$FILE" .java)
-            TEST_FILE="src/test/${FILE#src/main/}"
+            TEST_FILE="supplier-api/src/test/${FILE#supplier-api/src/main/}"
             TEST_FILE="${TEST_FILE%.java}Test.java"
             FILES_ARRAY+=(--form "files=@${FILE}")
             if [ -f "$TEST_FILE" ]; then
@@ -126,7 +126,7 @@ jobs:
             FILE_URL="http://api.gftaiimpact.local${uri}" 
             FILE_CONTENT=$(curl --location "$FILE_URL" --header "Authorization: Bearer ${{ env.access_token }}")
             CLASS_NAME=$(basename "$uri" .java)
-            TEST_FILE="src/test/${uri#src/main/}"
+            TEST_FILE="supplier-api/src/test/${uri#src/main/}"
             TEST_FILE="${TEST_FILE%.java}Test.java"
           
             mkdir -p "$(dirname "$TEST_FILE")"
