@@ -190,6 +190,8 @@ jobs:
 
           while IFS= read -r uri; do
             FILE_URL="http://api.gftaiimpact.local${uri}" 
+            echo "File URL: $FILE_URL"
+            echo "curl --location $FILE_URL --header 'Authorization: Bearer ${{ env.access_token }}'
             FILE_CONTENT=$(curl --location "$FILE_URL" --header "Authorization: Bearer ${{ env.access_token }}")
             CLASS_NAME=$(basename "$uri" | sed 's/\.java\.md$//')
             DOC_FILE="wiki/$(dirname "$uri")/$(CLASS_NAME).md"
