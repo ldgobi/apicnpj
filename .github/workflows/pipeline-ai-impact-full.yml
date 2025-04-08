@@ -189,14 +189,14 @@ jobs:
           OUTPUT_URIS="${{ env.output_uris }}"
 
           while IFS= read -r uri; do
-            echo "Processing URI: ${{uri}}"
-            #FILE_URL="http://api.gftaiimpact.local/${{uri}}"
-            #FILE_CONTENT=$(curl --location "$FILE_URL" --header "Authorization: Bearer ${{ env.access_token }}")
-            #CLASS_NAME=$(basename "$uri" | sed 's/\.java\.md$//')
-            #DOC_FILE="wiki/$(dirname "$uri")/$(CLASS_NAME).md"
+            echo "Processing URI:$uri"
+            FILE_URL="http://api.gftaiimpact.local/$uri"
+            FILE_CONTENT=$(curl --location "$FILE_URL" --header "Authorization: Bearer ${{ env.access_token }}")
+            CLASS_NAME=$(basename "$uri" | sed 's/\.java\.md$//')
+            DOC_FILE="wiki/$(dirname "$uri")/$(CLASS_NAME).md"
           
-            #mkdir -p "$(dirname "$DOC_FILE")"
-            #echo "$FILE_CONTENT" > "$DOC_FILE"
+            mkdir -p "$(dirname "$DOC_FILE")"
+            echo "$FILE_CONTENT" > "$DOC_FILE"
           done <<< "$OUTPUT_URIS"
 
       - name: Commit and Push Documenter and Tests
