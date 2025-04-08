@@ -79,7 +79,8 @@ jobs:
           FILES_ARRAY=()
           while IFS= read -r FILE; do
             CLASS_NAME=$(basename "$FILE" .java)
-            TEST_FILE="src/test/java/com/scalesec/vulnado/${CLASS_NAME}Tests.java"
+            TEST_FILE="src/test/${FILE#src/main/}"
+            TEST_FILE="${TEST_FILE%.java}Test.java"
             FILES_ARRAY+=(--form "files=@${FILE}")
             if [ -f "$TEST_FILE" ]; then
               FILES_ARRAY+=(--form "ExistingTests=@${TEST_FILE}")
@@ -97,7 +98,7 @@ jobs:
             --form "PromptId=TestCreator__CreateUnitTests_V1" \
             --form "SourceCodeLanguage=Java" \
             --form "TestType=Unit" \
-            --form "TestingFrameworks=MSTEST,MOQ" \
+            --form "TestingFrameworks=SpringBootTest" \
             --form "Llm=${{ vars.LLM }}" \
             --form "AdditionalInstructions=Generate only the source code, without any extra information")
           echo "API Response: $RESPONSE"
@@ -135,7 +136,8 @@ jobs:
             FILE_URL="http://api.gftaiimpact.local${uri}" 
             FILE_CONTENT=$(curl --location "$FILE_URL" --header "Authorization: Bearer ${{ env.access_token }}")
             CLASS_NAME=$(basename "$uri" .java)
-            TEST_FILE="src/test/java/com/scalesec/vulnado/${CLASS_NAME}Tests.java"
+            TEST_FILE="src/test/${uri#src/main/}"
+            TEST_FILE="${TEST_FILE%.java}Test.java"
           
             mkdir -p "$(dirname "$TEST_FILE")"
             echo "$FILE_CONTENT" > "$TEST_FILE"
@@ -200,7 +202,7 @@ jobs:
             FILE_URL="http://api.gftaiimpact.local${uri}" 
             FILE_CONTENT=$(curl --location "$FILE_URL" --header "Authorization: Bearer ${{ env.access_token }}")
             CLASS_NAME=$(basename "$uri" | sed 's/\.java\.md$//')
-            DOC_FILE="wiki/src/main/java/com/scalesec/vulnado/${CLASS_NAME}Docs.md"
+            DOC_FILE="wiki/$(dirname "$uri")/$(CLASS_NAME).md"
           
             mkdir -p "$(dirname "$DOC_FILE")"
             echo "$FILE_CONTENT" > "$DOC_FILE"
